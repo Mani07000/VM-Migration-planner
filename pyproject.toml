@@ -1,0 +1,20 @@
+[project]
+name = "cc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dash>=3.2.0",
+    "joblib>=1.5.2",
+    "networkx>=3.5",
+    "numpy>=2.3.3",
+    "pandas>=2.3.3",
+    "pydantic>=2.11.10",
+    "pyvis>=0.3.2",
+    "pyvis-network>=0.0.6",
+    "scikit-learn>=1.7.2",
+    "streamlit>=1.50.0",
+    "tensorflow>=2.20.0",
+    "torch>=2.8.0",
+]

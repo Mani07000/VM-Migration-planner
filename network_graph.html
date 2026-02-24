@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #FFFFFF;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#FFD700", "font": {"color": "black"}, "id": "Host1", "label": "Host: Host1", "shape": "box", "size": 30, "title": "Host Host1\nCPU: 7/8\nRAM: 14336/16384 GB\nStorage: 170/500 GB"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "Host2", "label": "Host: Host2", "shape": "box", "size": 30, "title": "Host Host2\nCPU: 3/16\nRAM: 3050/32768 GB\nStorage: 80/1000 GB"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "Host 4", "label": "Host: Host 4", "shape": "box", "size": 30, "title": "Host Host 4\nCPU: 0/10\nRAM: 0/20000 GB\nStorage: 0/600 GB"}, {"color": "#90EE90", "font": {"color": "black"}, "id": "Host3", "label": "Host: Host3", "shape": "box", "size": 30, "title": "Host Host3\nCPU: 0/4\nRAM: 0/8192 GB\nStorage: 0/200 GB"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Host 2", "label": "Host 2", "shape": "dot", "size": 10}, {"color": "#87CEEB", "font": {"color": "black"}, "id": "VM2", "label": "VM: VM2", "shape": "ellipse", "size": 20, "title": "VM: VM2\nCPU: 2 cores\nRAM: 4096 GB\nStorage: 50 GB\n\n Migrating to: Host1\n Est. Time: 7.85 min"}, {"color": "#87CEEB", "font": {"color": "black"}, "id": "VM1", "label": "VM: VM1", "shape": "ellipse", "size": 20, "title": "VM: VM1\nCPU: 4 cores\nRAM: 8192 GB\nStorage: 100 GB\n\n Migrating to: Host1\n Est. Time: 15.7 min"}, {"color": "#87CEEB", "font": {"color": "black"}, "id": "VM3", "label": "VM: VM3", "shape": "ellipse", "size": 20, "title": "VM: VM3\nCPU: 1 cores\nRAM: 2048 GB\nStorage: 20 GB\n\n Migrating to: Host1\n Est. Time: 3.14 min"}, {"color": "#87CEEB", "font": {"color": "black"}, "id": "VM4", "label": "VM: VM4", "shape": "ellipse", "size": 20, "title": "VM: VM4\nCPU: 3 cores\nRAM: 3050 GB\nStorage: 80 GB\n\n Migrating to: Host2\n Est. Time: 12.56 min"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#CCCCCC", "from": "Host1", "label": "Link1", "to": "Host2", "width": 1}, {"arrows": "to", "color": "#CCCCCC", "from": "Host1", "label": "Link3", "to": "Host 4", "width": 1}, {"arrows": "to", "color": "#CCCCCC", "from": "Host2", "label": "Link2", "to": "Host3", "width": 1}, {"arrows": "to", "color": "#CCCCCC", "from": "Host 4", "label": "Link 4", "to": "Host 2", "width": 1}, {"arrows": "to", "color": "#FF4444", "dashes": false, "from": "VM2", "label": "Migration\n 7.85 min", "physics": true, "title": "Migrating VM2 \u2192 Host1\nTime: 471.04s (7.85 min)", "to": "Host1", "width": 1}, {"arrows": "to", "color": "#FF4444", "dashes": false, "from": "VM1", "label": "Migration\n 15.7 min", "physics": true, "title": "Migrating VM1 \u2192 Host1\nTime: 942.08s (15.7 min)", "to": "Host1", "width": 1}, {"arrows": "to", "color": "#FF4444", "dashes": false, "from": "VM3", "label": "Migration\n 3.14 min", "physics": true, "title": "Migrating VM3 \u2192 Host1\nTime: 188.42s (3.14 min)", "to": "Host1", "width": 1}, {"arrows": "to", "color": "#FF4444", "dashes": false, "from": "VM4", "label": "Migration\n 12.56 min", "physics": true, "title": "Migrating VM4 \u2192 Host2\nTime: 753.66s (12.56 min)", "to": "Host2", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"font": {"size": 14, "face": "arial"}, "borderWidth": 2, "borderWidthSelected": 4}, "edges": {"font": {"size": 12, "align": "middle"}, "arrows": {"to": {"enabled": true, "scaleFactor": 0.5}}, "smooth": {"enabled": true, "type": "continuous"}}, "physics": {"enabled": true, "barnesHut": {"gravitationalConstant": -8000, "centralGravity": 0.3, "springLength": 200, "springConstant": 0.04}, "stabilization": {"iterations": 150}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
